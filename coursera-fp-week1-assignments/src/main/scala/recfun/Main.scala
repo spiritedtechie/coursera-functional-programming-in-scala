@@ -44,21 +44,28 @@ object Main {
    * Exercise 2
    */
   def balance(chars: List[Char]): Boolean = {
-    
+
     @tailrec
-    def countBalance(chars: List[Char], openCount: Int) : Int = {
-        if (chars.isEmpty) openCount
-        else if (chars.head == '(') countBalance(chars.tail, openCount + 1)
-        else if (chars.head == ')' && openCount == 0) -1
-        else if (chars.head == ')' && openCount > 0) countBalance(chars.tail, openCount - 1)
-        else countBalance(chars.tail, openCount)
+    def countBalance(chars: List[Char], openCount: Int): Int = {
+      if (chars.isEmpty) openCount
+      else if (chars.head == '(') countBalance(chars.tail, openCount + 1)
+      else if (chars.head == ')' && openCount == 0) -1
+      else if (chars.head == ')' && openCount > 0) countBalance(chars.tail, openCount - 1)
+      else countBalance(chars.tail, openCount)
     }
-    
-    if (countBalance(chars, 0) != 0) false else true
+
+    countBalance(chars, 0) == 0
   }
 
   /**
    * Exercise 3
    */
-  def countChange(money: Int, coins: List[Int]): Int = ???
+  def countChange(money: Int, coins: List[Int]): Int = {
+
+    if (money == 0) 1
+    else if (money < 0) 0
+    else if (coins.isEmpty) 0
+    else countChange(money - coins.head, coins) + countChange(money, coins.tail)
+  }
+  
 }
