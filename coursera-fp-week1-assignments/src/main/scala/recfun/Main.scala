@@ -14,7 +14,28 @@ object Main {
   /**
    * Exercise 1
    */
-  def pascal(c: Int, r: Int): Int = ???
+  def pascal(c: Int, r: Int): Int = {
+
+    def nextRowList(l: List[Int]): List[Int] =
+      1 :: combineAdjElements(l) ::: List(1)
+
+    def loopToRowList(rIter: Int, l: List[Int]): List[Int] =
+      if (rIter == r) l
+      else loopToRowList(rIter + 1, nextRowList(l))
+
+    val matchedRowList = loopToRowList(0, List(1))
+
+    matchedRowList(c)
+  }
+
+  def combineAdjElements(l: List[Int]): List[Int] = {
+
+    def addIter(accList: List[Int], i1: Int, i2: Int): List[Int] =
+      if (i2 >= l.size) accList
+      else addIter(accList ::: List(l(i1) + l(i2)), i1 + 1, i2 + 1)
+
+    addIter(List(), 0, 1)
+  }
 
   /**
    * Exercise 2
