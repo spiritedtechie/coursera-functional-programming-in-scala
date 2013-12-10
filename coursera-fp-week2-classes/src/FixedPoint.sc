@@ -4,6 +4,7 @@ object FixedPoint {
 
   def isCloseEnough(x: Double, y: Double) =
     Math.abs((x - y) / x) / x < tolerance         //> isCloseEnough: (x: Double, y: Double)Boolean
+  
   def fixedPoint(f: Double => Double)(firstGuess: Double) = {
     def iterate(guess: Double): Double = {
       val next = f(guess)
@@ -21,8 +22,9 @@ object FixedPoint {
                                                   //> sqrt: (x: Double)Double
   sqrt(4)                                         //> res1: Double = 2.000000000000002
 
-  def averageDamp(f: Double => Double)(x: Double) = (x + f(x)) / 2
-                                                  //> averageDamp: (f: Double => Double)(x: Double)Double
+	// wraps the core function with a dampener
+  def averageDamp(f: Double => Double)(y: Double) : Double = (y + f(y)) / 2
+                                                  //> averageDamp: (f: Double => Double)(y: Double)Double
 
   def sqrt2(x: Double) = fixedPoint(averageDamp(y => x / y))(1)
                                                   //> sqrt2: (x: Double)Double
