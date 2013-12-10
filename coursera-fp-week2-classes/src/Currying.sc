@@ -14,18 +14,25 @@ object Currying {
     mapReduce(f)((x, y) => x + y)(a, b, 0)        //> sum: (f: Int => Int)(a: Int, b: Int)Int
 
 	// currying
-  def product(f: Int => Int)(a: Int, b: Int): Int =
-    mapReduce(f)((x, y) => x * y)(a, b, 1)        //> product: (f: Int => Int)(a: Int, b: Int)Int
+  def product(f: Int => Int)(a: Int)(b: Int): Int =
+    mapReduce(f)((x, y) => x * y)(a, b, 1)        //> product: (f: Int => Int)(a: Int)(b: Int)Int
 
-  product(x => x)(1, 5)                           //> res0: Int = 120
+  product(x => x)(1)(5)                           //> res0: Int = 120
 
   def factorial(n: Int): Int =
-    product(x => x)(1, n)                         //> factorial: (n: Int)Int
+    product(x => x)(1)(n)                         //> factorial: (n: Int)Int
 
   factorial(5)                                    //> res1: Int = 120
   
   // partially applied function
-  val paProd = product(x => x) _                  //> paProd  : (Int, Int) => Int = <function2>
+  val paProd = product(x => x) _                  //> paProd  : Int => (Int => Int) = <function1>
   
-  paProd(1, 5)                                    //> res2: Int = 120
+  paProd(1)(5)                                    //> res2: Int = 120
+  
+  // currying (somewhat more explicit)
+  def prodFrom1(): Int => Int = {
+  	product(x => x)(1)
+  }                                               //> prodFrom1: ()Int => Int
+  
+  prodFrom1()(5)                                  //> res3: Int = 120
 }
