@@ -119,4 +119,22 @@ class FunSetSuite extends FunSuite {
       assert(!forall(su1, x => x > 3), "ForAll 2")
     }
   }
+
+  test("exists where sets contains at least one matching element") {
+    new TestSets {
+      val su1 = union(union(s1, s2), s3)
+
+      assert(exists(su1, x => x == 1), "Exists 1")
+      assert(exists(su1, x => x > 1), "Exists 2")
+    }
+  }
+
+  test("exists where sets does not contain at least one matching element") {
+    new TestSets {
+      val su1 = union(union(s1, s2), s3)
+
+      assert(!exists(su1, x => x == 5), "Exists 1")
+      assert(!exists(su1, x => x < 1), "Exists 2")
+    }
+  }
 }
