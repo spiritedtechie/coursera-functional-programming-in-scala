@@ -4,9 +4,11 @@ import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import FunSets.contains
 import FunSets.diff
+import FunSets.exists
 import FunSets.filter
 import FunSets.forall
 import FunSets.intersect
+import FunSets.map
 import FunSets.singletonSet
 import FunSets.union
 import org.scalatest.junit.JUnitRunner
@@ -24,7 +26,6 @@ class FunSetSuite extends FunSuite {
     val s1 = singletonSet(1)
     val s2 = singletonSet(2)
     val s3 = singletonSet(3)
-    val s4 = singletonSet(3)
   }
 
   test("singletonSet(1) contains 1") {
@@ -45,7 +46,7 @@ class FunSetSuite extends FunSuite {
 
   test("intersect contains all shared elements - one element") {
     new TestSets {
-      val s = intersect(s3, s4)
+      val s = intersect(s3, s3)
       assert(!contains(s, 1), "Intersect 1")
       assert(!contains(s, 2), "Intersect 2")
       assert(contains(s, 3), "Intersect 3")
@@ -135,6 +136,22 @@ class FunSetSuite extends FunSuite {
 
       assert(!exists(su1, x => x == 5), "Exists 1")
       assert(!exists(su1, x => x < 1), "Exists 2")
+    }
+  }
+
+  test("map of a set applying a mapping function") {
+    new TestSets {
+      val su1 = union(union(s1, s2), s3)
+
+      val set = map(su1, x => 2 * x)
+      assert(contains(set, 2), "Map 1")
+      assert(contains(set, 4), "Map 2")
+      assert(contains(set, 6), "Map 3")
+
+      val set2 = map(su1, x => x * x)
+      assert(contains(set2, 1), "Map 4")
+      assert(contains(set2, 4), "Map 5")
+      assert(contains(set2, 9), "Map 6")
     }
   }
 }

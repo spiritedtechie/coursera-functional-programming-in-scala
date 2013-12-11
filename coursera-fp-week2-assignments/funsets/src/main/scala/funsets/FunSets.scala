@@ -1,7 +1,5 @@
 package funsets
 
-import common._
-
 /**
  * 2. Purely Functional Sets.
  */
@@ -72,7 +70,20 @@ object FunSets {
   /**
    * Returns a set transformed by applying `f` to each element of `s`.
    */
-  def map(s: Set, f: Int => Int): Set = ???
+  def map(s: Set, f: Int => Int): Set = {
+
+    def addToSet(s1: Set, n: Int): Set =
+      if (s1 == Nil) singletonSet(n)
+      else union(s1, singletonSet(n))
+
+    def iter(a: Int, acc: Set): Set = {
+      if (a > bound) acc
+      else if (contains(s, a)) iter(a + 1, addToSet(acc, f(a)))
+      else iter(a + 1, acc)
+    }
+
+    iter(-bound, Nil)
+  }
 
   /**
    * Displays the contents of a set
