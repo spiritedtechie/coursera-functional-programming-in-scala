@@ -3,6 +3,10 @@ package funsets
 import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import FunSets.contains
+import FunSets.diff
+import FunSets.filter
+import FunSets.forall
+import FunSets.intersect
 import FunSets.singletonSet
 import FunSets.union
 import org.scalatest.junit.JUnitRunner
@@ -80,6 +84,39 @@ class FunSetSuite extends FunSuite {
       assert(contains(s, 1), "Filter 1")
       assert(contains(s, 2), "Filter 2")
       assert(!contains(s, 3), "Filter 3")
+    }
+  }
+
+  test("forall where all elements match predicate") {
+    new TestSets {
+      val su1 = union(union(s1, s2), s3)
+
+      val s = filter(su1, x => x <= 2)
+      assert(contains(s, 1), "Filter 1")
+      assert(contains(s, 2), "Filter 2")
+      assert(!contains(s, 3), "Filter 3")
+    }
+  }
+
+  test("forall where all elements do match predicate") {
+    new TestSets {
+      val su1 = union(union(s1, s2), s3)
+      val su2 = union(union(s3, s3), s3)
+
+      assert(forall(su1, x => x < 4), "ForAll 1")
+      assert(forall(su1, x => x <= 3), "ForAll 2")
+      assert(forall(su1, x => x >= 0), "ForAll 3")
+      assert(forall(su1, x => x > -1000), "ForAll 4")
+      assert(forall(su2, x => x == 3), "ForAll 5")
+    }
+  }
+
+  test("forall where an element in set does NOT match predicate") {
+    new TestSets {
+      val su1 = union(union(s1, s2), s3)
+
+      assert(!forall(su1, x => x == 0), "ForAll 1")
+      assert(!forall(su1, x => x > 3), "ForAll 2")
     }
   }
 }
