@@ -21,11 +21,11 @@ object Main {
       1 :: combineAdjElements(l) ::: List(1)
 
     @tailrec
-    def loopToRowList(rIter: Int, l: List[Int]): List[Int] =
+    def matchRowList(rIter: Int, l: List[Int]): List[Int] =
       if (rIter == r) l
-      else loopToRowList(rIter + 1, nextRowList(l))
+      else matchRowList(rIter + 1, nextRowList(l))
 
-    val matchedRowList = loopToRowList(0, List(1))
+    val matchedRowList = matchRowList(0, List(1))
 
     matchedRowList(c)
   }
