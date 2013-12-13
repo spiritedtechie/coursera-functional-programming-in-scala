@@ -114,7 +114,7 @@ class Empty extends TweetSet {
 
   def union(that: TweetSet): TweetSet = that
 
-  def mostRetweeted: Tweet = null
+  def mostRetweeted: Tweet = throw new NoSuchElementException("Empty.mostRetweeted")
 
   def mostRetweetedAccum(acc: Tweet): Tweet = acc
 
@@ -210,7 +210,7 @@ object GoogleVsApple {
    * A list of all tweets mentioning a keyword from either apple or google,
    * sorted by the number of retweets.
    */
-  lazy val trending: TweetList = googleTweets union appleTweets descendingByRetweet
+  lazy val trending: TweetList = (googleTweets union appleTweets).descendingByRetweet
 }
 
 object Main extends App {
