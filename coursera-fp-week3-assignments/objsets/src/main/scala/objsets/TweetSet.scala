@@ -135,9 +135,9 @@ class Empty extends TweetSet {
 
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
-  def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet =
-    if (p(elem)) right.filterAcc(p, left.filterAcc(p, acc.incl(elem)))
-    else right.filterAcc(p, left.filterAcc(p, acc))
+  def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = {
+    right.filterAcc(p, left.filterAcc(p, if (p(elem)) acc.incl(elem) else acc))
+  }
 
   def union(that: TweetSet): TweetSet =
     ((left union right) union that).incl(elem)
@@ -149,7 +149,7 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     else right.mostRetweetedAccum(left.mostRetweetedAccum(acc))
   }
 
-  def descendingByRetweet: TweetList = new Cons(mostRetweeted, this.remove(mostRetweeted).descendingByRetweet)
+  def descendingByRetweet: TweetList = new Cons(mostRetweeted, remove(mostRetweeted).descendingByRetweet)
 
   /**
    * The following methods are already implemented
