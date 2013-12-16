@@ -21,6 +21,7 @@ object Empty extends IntSet {
   override def toString = "."
 }
 
+// binary tree implementation
 class NonEmpty(elem: Int, left: IntSet, right: IntSet) extends IntSet {
 
   def contains(x: Int): Boolean =
