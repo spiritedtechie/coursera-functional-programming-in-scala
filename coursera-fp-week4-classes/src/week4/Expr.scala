@@ -9,8 +9,10 @@ trait Expr {
   def show(): String = this match {
     case Number(n) => n.toString
     case Var(x) => x
-    case Sum(e1, e2) => "(" + e1.show + " + " + e2.show + ")"
-    case Prod(e1, e2) => "(" + e1.show + " * " + e2.show + ")"
+    case Sum(Prod(e1, e2), e3) => e1.show + " * " + e2.show + " + " + e3.show
+    case Prod(Sum(e1, e2), e3) => "(" + e1.show + " + " + e2.show + ")" + " * " + e3.show
+    case Prod(e1, e2) => e1.show + " * " + e2.show
+    case Sum(e1, e2) => e1.show + " + " + e2.show
   }
 }
 

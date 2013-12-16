@@ -18,8 +18,16 @@ object ExprScratch {
   localShow(Sum(Number(26), Number(33)))          //> res2: String = 26 + 33
 
   Sum(Number(26), Number(33)).eval                //> res3: Int = 59
-  Sum(Number(26), Number(33)).show                //> res4: String = (26 + 33)
+  Sum(Number(26), Number(33)).show                //> res4: String = 26 + 33
 
-  Sum(Prod(Number(2), Var("x")), Var("y")).show   //> res5: String = ((2 * x) + y)
-  Prod(Sum(Number(2), Var("x")), Var("y")).show   //> res6: String = ((2 + x) * y)
+  Sum(Prod(Number(2), Var("x")), Var("y")).show   //> res5: String = 2 * x + y
+  Prod(Sum(Number(2), Var("x")), Var("y")).show   //> res6: String = (2 + x) * y
+  Prod(Prod(Number(2), Var("x")), Sum(Number(4), Var("y"))).show
+                                                  //> res7: String = 2 * x * 4 + y
+  Prod(Sum(Number(2), Var("x")), Sum(Number(4), Var("y"))).show
+                                                  //> res8: String = (2 + x) * 4 + y
+  Prod(Sum(Sum(Number(2), Number(4)), Var("x")), Sum(Number(4), Var("y"))).show
+                                                  //> res9: String = (2 + 4 + x) * 4 + y
+  Prod(Number(2), Number(4)).show                 //> res10: String = 2 * 4
+  Sum(Number(2), Number(4)).show                  //> res11: String = 2 + 4
 }
