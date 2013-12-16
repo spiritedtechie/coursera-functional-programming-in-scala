@@ -139,8 +139,8 @@ object Huffman {
   def combine(trees: List[CodeTree]): List[CodeTree] = {
 
     def insertRetainingSort(l: List[CodeTree], ct: CodeTree): List[CodeTree] = l match {
-      case Leaf(c, w) :: t => if (weight(ct) <= w) ct :: l else Leaf(c, w) :: insertRetainingSort(t, ct)
-      case Fork(lt, rt, c, w) :: t => if (weight(ct) <= w) ct :: l else Fork(lt, rt, c, w) :: insertRetainingSort(t, ct)
+      case Leaf(c, w) :: t => if (weight(ct) < w) ct :: l else Leaf(c, w) :: insertRetainingSort(t, ct)
+      case Fork(lt, rt, c, w) :: t => if (weight(ct) < w) ct :: l else Fork(lt, rt, c, w) :: insertRetainingSort(t, ct)
       case _ => List(ct)
     }
 
@@ -149,6 +149,9 @@ object Huffman {
       case Leaf(l1c, l1w) :: Leaf(l2c, l2w) :: tail =>
         insertRetainingSort(tail,
           Fork(Leaf(l1c, l1w), Leaf(l2c, l2w), List(l1c, l2c), l1w + l2w))
+      case Fork(f1l, f1r, f1c, f1w) :: Fork(f2l, f2r, f2c, f2w) :: tail =>
+        insertRetainingSort(tail,
+          Fork(Fork(f1l, f1r, f1c, f1w), Fork(f2l, f2r, f2c, f2w), f1c ::: f2c, f1w + f2w))    
       case Fork(fl, fr, fc, fw) :: Leaf(lc, lw) :: tail =>
         insertRetainingSort(tail,
           Fork(Fork(fl, fr, fc, fw), Leaf(lc, lw), fc ::: List(lc), fw + lw))

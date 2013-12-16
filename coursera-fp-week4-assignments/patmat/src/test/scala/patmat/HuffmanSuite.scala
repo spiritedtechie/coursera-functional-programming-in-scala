@@ -72,6 +72,7 @@ class HuffmanSuite extends FunSuite {
         Fork(Leaf('e', 3), Leaf('t', 4), List('e', 't'), 7),
         List('x', 'e', 't'),
         13)))
+
   }
 
   test("combine of some leaf list - less than two elements") {
@@ -87,6 +88,17 @@ class HuffmanSuite extends FunSuite {
         Fork(Leaf('e', 3), Leaf('t', 4), List('e', 't'), 7),
         List('x', 'e', 't'),
         13)))
+
+    val leaflist2 = List(Leaf('a', 1), Leaf('b', 1), Leaf('c', 1), Leaf('d', 1), Leaf('e', 3))
+    val exp2 = List(Fork(
+      Leaf('e', 3),
+      Fork(
+        Fork(Leaf('a', 1), Leaf('b', 1), List('a', 'b'), 2),
+        Fork(Leaf('c', 1), Leaf('d', 1), List('c', 'd'), 2),
+        List('a', 'b', 'c', 'd'), 4),
+      List('e', 'a', 'b', 'c', 'd'), 7))
+
+    assert(until(singleton, combine)(leaflist2) === exp2)
   }
 
   test("create code tree") {
