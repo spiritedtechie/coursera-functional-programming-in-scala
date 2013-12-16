@@ -26,5 +26,6 @@ object ScalaListScratch {
     case y :: ys => insert(y, isort(ys))
   }                                               //> isort: (xs: List[Int])List[Int]
 
+  // worse case complexity = N * N
   isort(List(7, 3, 9, 2))                         //> res3: List[Int] = List(2, 3, 7, 9)
 }
