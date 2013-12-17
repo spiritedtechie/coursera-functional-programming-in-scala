@@ -1,6 +1,6 @@
 import math.Ordering
 
-object ListScratch {
+object HOFScratch {
 
   // parameterized generic merge sort
   def msort[T](xs: List[T])(implicit ord: Ordering[T]): List[T] = {
@@ -33,6 +33,7 @@ object ListScratch {
 
   val l3 = List("a", "a", "a", "b", "c", "c", "a")//> l3  : List[String] = List(a, a, a, b, c, c, a)
 
+	// pack and encode
   def pack[T](xs: List[T]): List[List[T]] = xs match {
     case Nil => Nil
     case x :: xs1 =>
@@ -48,4 +49,5 @@ object ListScratch {
   encode(l3)                                      //> res3: List[(String, Int)] = List((a,3), (b,1), (c,2), (a,1))
 
   l3.filter(x => x > "a")                         //> res4: List[String] = List(b, c, c)
+  
 }
