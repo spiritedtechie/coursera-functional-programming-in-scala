@@ -147,17 +147,13 @@ object Huffman {
     trees match {
       case Leaf(l1c, l1w) :: Nil => trees
       case Leaf(l1c, l1w) :: Leaf(l2c, l2w) :: tail =>
-        insertRetainingSort(tail,
-          Fork(Leaf(l1c, l1w), Leaf(l2c, l2w), List(l1c, l2c), l1w + l2w))
+        insertRetainingSort(tail, makeCodeTree(Leaf(l1c, l1w), Leaf(l2c, l2w)))
       case Fork(f1l, f1r, f1c, f1w) :: Fork(f2l, f2r, f2c, f2w) :: tail =>
-        insertRetainingSort(tail,
-          Fork(Fork(f1l, f1r, f1c, f1w), Fork(f2l, f2r, f2c, f2w), f1c ::: f2c, f1w + f2w))    
+        insertRetainingSort(tail, makeCodeTree(Fork(f1l, f1r, f1c, f1w), Fork(f2l, f2r, f2c, f2w)))   
       case Fork(fl, fr, fc, fw) :: Leaf(lc, lw) :: tail =>
-        insertRetainingSort(tail,
-          Fork(Fork(fl, fr, fc, fw), Leaf(lc, lw), fc ::: List(lc), fw + lw))
+        insertRetainingSort(tail, makeCodeTree(Fork(fl, fr, fc, fw), Leaf(lc, lw)))
       case Leaf(lc, lw) :: Fork(fl, fr, fc, fw) :: tail =>
-        insertRetainingSort(tail,
-          Fork(Leaf(lc, lw), Fork(fl, fr, fc, fw), lc :: fc, lw + fw))
+        insertRetainingSort(tail, makeCodeTree(Leaf(lc, lw), Fork(fl, fr, fc, fw)))
       case _ => throw new IllegalArgumentException("Invalid code tree list")
     }
   }
