@@ -77,7 +77,7 @@ object Huffman {
   def times(chars: List[Char]): List[(Char, Int)] = {
 
     def isPairMatched(p: (Char, Int), charToMatch: Char): Boolean = p match {
-      case (char, count) => if (char == charToMatch) true else false
+      case (char, count) => char == charToMatch
     }
 
     def incrementMatchingPair(pairs: List[(Char, Int)], c: Char): List[(Char, Int)] = pairs match {
@@ -136,26 +136,23 @@ object Huffman {
    * If `trees` is a list of less than two elements, that list should be returned
    * unchanged.
    */
-  def combine(trees: List[CodeTree]): List[CodeTree] = {
+  def combine(trees: List[CodeTree]): List[CodeTree] = trees match {
+    case Leaf(l1c, l1w) :: Nil => trees
+    case Leaf(l1c, l1w) :: Leaf(l2c, l2w) :: tail =>
+      insertRetainingSort(tail, makeCodeTree(Leaf(l1c, l1w), Leaf(l2c, l2w)))
+    case Fork(f1l, f1r, f1c, f1w) :: Fork(f2l, f2r, f2c, f2w) :: tail =>
+      insertRetainingSort(tail, makeCodeTree(Fork(f1l, f1r, f1c, f1w), Fork(f2l, f2r, f2c, f2w)))
+    case Fork(fl, fr, fc, fw) :: Leaf(lc, lw) :: tail =>
+      insertRetainingSort(tail, makeCodeTree(Fork(fl, fr, fc, fw), Leaf(lc, lw)))
+    case Leaf(lc, lw) :: Fork(fl, fr, fc, fw) :: tail =>
+      insertRetainingSort(tail, makeCodeTree(Leaf(lc, lw), Fork(fl, fr, fc, fw)))
+    case _ => throw new IllegalArgumentException("Invalid code tree list")
+  }
 
-    def insertRetainingSort(l: List[CodeTree], ct: CodeTree): List[CodeTree] = l match {
-      case Leaf(c, w) :: t => if (weight(ct) < w) ct :: l else Leaf(c, w) :: insertRetainingSort(t, ct)
-      case Fork(lt, rt, c, w) :: t => if (weight(ct) < w) ct :: l else Fork(lt, rt, c, w) :: insertRetainingSort(t, ct)
-      case _ => List(ct)
-    }
-
-    trees match {
-      case Leaf(l1c, l1w) :: Nil => trees
-      case Leaf(l1c, l1w) :: Leaf(l2c, l2w) :: tail =>
-        insertRetainingSort(tail, makeCodeTree(Leaf(l1c, l1w), Leaf(l2c, l2w)))
-      case Fork(f1l, f1r, f1c, f1w) :: Fork(f2l, f2r, f2c, f2w) :: tail =>
-        insertRetainingSort(tail, makeCodeTree(Fork(f1l, f1r, f1c, f1w), Fork(f2l, f2r, f2c, f2w)))
-      case Fork(fl, fr, fc, fw) :: Leaf(lc, lw) :: tail =>
-        insertRetainingSort(tail, makeCodeTree(Fork(fl, fr, fc, fw), Leaf(lc, lw)))
-      case Leaf(lc, lw) :: Fork(fl, fr, fc, fw) :: tail =>
-        insertRetainingSort(tail, makeCodeTree(Leaf(lc, lw), Fork(fl, fr, fc, fw)))
-      case _ => throw new IllegalArgumentException("Invalid code tree list")
-    }
+  def insertRetainingSort(l: List[CodeTree], ct: CodeTree): List[CodeTree] = l match {
+    case Leaf(c, w) :: t => if (weight(ct) < w) ct :: l else Leaf(c, w) :: insertRetainingSort(t, ct)
+    case Fork(lt, rt, c, w) :: t => if (weight(ct) < w) ct :: l else Fork(lt, rt, c, w) :: insertRetainingSort(t, ct)
+    case _ => List(ct)
   }
 
   /**
