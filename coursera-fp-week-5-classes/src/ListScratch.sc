@@ -1,18 +1,30 @@
 object ListScratch {
 
+  // parameterized generic merge sort
+  def msort[T](xs: List[T])(lt: (T, T) => Boolean): List[T] = {
+    val n = xs.length / 2
+    if (n == 0) xs
+    else {
+      val (fst, snd) = xs splitAt n
+      merge(msort(fst)(lt), msort(snd)(lt))(lt)
+    }
+  }                                               //> msort: [T](xs: List[T])(lt: (T, T) => Boolean)List[T]
+
   // pattern matching tuples
-  def merge(xs: List[Int], ys: List[Int]): List[Int] =
+  def merge[T](xs: List[T], ys: List[T])(lt: (T, T) => Boolean): List[T] =
     (xs, ys) match {
       case (Nil, ys) => ys
       case (xs, Nil) => xs
       case (x :: xs1, y :: ys1) =>
-        if (x < y) x :: merge(xs1, ys)
-        else y :: merge(xs, ys1)
-    }                                             //> merge: (xs: List[Int], ys: List[Int])List[Int]
+        if (lt(x, y)) x :: merge(xs1, ys)(lt)
+        else y :: merge(xs, ys1)(lt)
+    }                                             //> merge: [T](xs: List[T], ys: List[T])(lt: (T, T) => Boolean)List[T]
 
-  val l = List(1, 2, 3, 4, 5)                     //> l  : List[Int] = List(1, 2, 3, 4, 5)
+  val l = List(10, 5, 3, 14, 5, 20, 5, 6, 70)     //> l  : List[Int] = List(10, 5, 3, 14, 5, 20, 5, 6, 70)
 
-  val l2 = List(2, 5, 6, 7)                       //> l2  : List[Int] = List(2, 5, 6, 7)
+  msort(l)((x, y) => x < y)                       //> res0: List[Int] = List(3, 5, 5, 5, 6, 10, 14, 20, 70)
 
-  merge(l, l2)                                    //> res0: List[Int] = List(1, 2, 2, 3, 4, 5, 5, 6, 7)
+  val fl = List("apple", "pineapple", "banana", "pear")
+                                                  //> fl  : List[String] = List(apple, pineapple, banana, pear)
+  msort(fl)((x, y) => x.compareTo(y) < 0)         //> res1: List[String] = List(apple, banana, pear, pineapple)
 }
