@@ -149,7 +149,7 @@ object Huffman {
       case Leaf(l1c, l1w) :: Leaf(l2c, l2w) :: tail =>
         insertRetainingSort(tail, makeCodeTree(Leaf(l1c, l1w), Leaf(l2c, l2w)))
       case Fork(f1l, f1r, f1c, f1w) :: Fork(f2l, f2r, f2c, f2w) :: tail =>
-        insertRetainingSort(tail, makeCodeTree(Fork(f1l, f1r, f1c, f1w), Fork(f2l, f2r, f2c, f2w)))   
+        insertRetainingSort(tail, makeCodeTree(Fork(f1l, f1r, f1c, f1w), Fork(f2l, f2r, f2c, f2w)))
       case Fork(fl, fr, fc, fw) :: Leaf(lc, lw) :: tail =>
         insertRetainingSort(tail, makeCodeTree(Fork(fl, fr, fc, fw), Leaf(lc, lw)))
       case Leaf(lc, lw) :: Fork(fl, fr, fc, fw) :: tail =>
@@ -241,7 +241,18 @@ object Huffman {
    * This function encodes `text` using the code tree `tree`
    * into a sequence of bits.
    */
-  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = text match {
+    case Nil => Nil
+    case (h :: t) => encodeChar(tree, h, Nil) ::: encode(tree)(t)
+  }
+
+  def encodeChar(tree: CodeTree, char: Char, acc: List[Bit]): List[Bit] = tree match {
+    case (Leaf(c, w)) => if (c == char) acc else throw new IllegalArgumentException("char not matched in tree")
+    case (Fork(l, r, c, w)) =>
+      if (chars(l).contains(char)) encodeChar(l, char, acc ::: List(0))
+      else if (chars(r).contains(char)) encodeChar(r, char, acc ::: List(1))
+      else throw new IllegalArgumentException("char not matched in tree")
+  }
 
   // Part 4b: Encoding using code table
 
