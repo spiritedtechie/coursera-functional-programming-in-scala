@@ -31,4 +31,21 @@ object ListScratch {
                                                   //> fl  : List[String] = List(apple, pineapple, banana, pear)
   msort(fl)                                       //> res1: List[String] = List(apple, banana, pear, pineapple)
 
+  val l3 = List("a", "a", "a", "b", "c", "c", "a")//> l3  : List[String] = List(a, a, a, b, c, c, a)
+
+  def pack[T](xs: List[T]): List[List[T]] = xs match {
+    case Nil => Nil
+    case x :: xs1 =>
+      val (first, rest) = xs span (y => y == x)
+      first :: pack(rest)
+  }                                               //> pack: [T](xs: List[T])List[List[T]]
+
+  pack(l3)                                        //> res2: List[List[String]] = List(List(a, a, a), List(b), List(c, c), List(a))
+                                                  //| 
+  def encode[T](xs: List[T]): List[(T, Int)] =
+    pack(xs) map (ys => (ys.head, ys.length))     //> encode: [T](xs: List[T])List[(T, Int)]
+
+  encode(l3)                                      //> res3: List[(String, Int)] = List((a,3), (b,1), (c,2), (a,1))
+
+  l3.filter(x => x > "a")                         //> res4: List[String] = List(b, c, c)
 }
