@@ -137,7 +137,9 @@ object Huffman {
    * unchanged.
    */
   def combine(trees: List[CodeTree]): List[CodeTree] = trees match {
+    case Nil => trees
     case Leaf(l1c, l1w) :: Nil => trees
+    case Fork(fl, fr, fc, fw) :: Nil => trees
     case Leaf(l1c, l1w) :: Leaf(l2c, l2w) :: tail =>
       insertRetainingSort(tail, makeCodeTree(Leaf(l1c, l1w), Leaf(l2c, l2w)))
     case Fork(f1l, f1r, f1c, f1w) :: Fork(f2l, f2r, f2c, f2w) :: tail =>
