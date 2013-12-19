@@ -22,4 +22,22 @@ object scratch {
                                                   //> res2: Map[List[(Char, Int)],List[String]] = Map(List((a,1), (e,1), (p,1), (t
                                                   //| ,1)) -> List(pate, tape), List((b,2), (o,1)) -> List(bob), List((a,1), (e,1)
                                                   //| , (t,1)) -> List(ate, eat, tea))
+
+  def combinations(occurrences: List[(Char, Int)]): List[List[(Char, Int)]] = occurrences match {
+    case Nil => List(Nil)
+    case (char, occCnt) :: t =>
+      for {
+        rest <- combinations(t)
+        n <- 0 to occCnt
+      } yield ((char, n) :: rest).filter(x => x._2 > 0)
+  }                                               //> combinations: (occurrences: List[(Char, Int)])List[List[(Char, Int)]]
+
+  combinations(List(('a', 2), ('b', 2), ('c', 2)))//> res3: List[List[(Char, Int)]] = List(List(), List((a,1)), List((a,2)), List(
+                                                  //| (b,1)), List((a,1), (b,1)), List((a,2), (b,1)), List((b,2)), List((a,1), (b,
+                                                  //| 2)), List((a,2), (b,2)), List((c,1)), List((a,1), (c,1)), List((a,2), (c,1))
+                                                  //| , List((b,1), (c,1)), List((a,1), (b,1), (c,1)), List((a,2), (b,1), (c,1)), 
+                                                  //| List((b,2), (c,1)), List((a,1), (b,2), (c,1)), List((a,2), (b,2), (c,1)), Li
+                                                  //| st((c,2)), List((a,1), (c,2)), List((a,2), (c,2)), List((b,1), (c,2)), List(
+                                                  //| (a,1), (b,1), (c,2)), List((a,2), (b,1), (c,2)), List((b,2), (c,2)), List((a
+                                                  //| ,1), (b,2), (c,2)), List((a,2), (b,2), (c,2)))
 }
