@@ -40,4 +40,23 @@ object scratch {
                                                   //| st((c,2)), List((a,1), (c,2)), List((a,2), (c,2)), List((b,1), (c,2)), List(
                                                   //| (a,1), (b,1), (c,2)), List((a,2), (b,1), (c,2)), List((b,2), (c,2)), List((a
                                                   //| ,1), (b,2), (c,2)), List((a,2), (b,2), (c,2)))
+
+  val x = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
+                                                  //> x  : List[(Char, Int)] = List((a,1), (d,1), (l,1), (r,1))
+  val y = List(('r', 1))                          //> y  : List[(Char, Int)] = List((r,1))
+
+  def subtract(x: List[(Char, Int)], y: List[(Char, Int)]): List[(Char, Int)] = {
+    val yMap = y.toMap withDefaultValue 0
+
+    def updateMap(m: Map[Char, Int], t: (Char, Int)): Map[Char, Int] = t match {
+      case (char, cnt) => m updated (char, cnt - yMap(char))
+      case _ => m
+    }
+
+    x.toMap.foldLeft(Map[Char, Int]())((acc, t) => updateMap(acc, t))
+    	.toList.filter(t => t._2 > 0)
+  }                                               //> subtract: (x: List[(Char, Int)], y: List[(Char, Int)])List[(Char, Int)]
+
+  subtract(x, y)                                  //> res4: List[(Char, Int)] = List((a,1), (d,1), (l,1))
+
 }
