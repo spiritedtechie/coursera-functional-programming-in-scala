@@ -43,8 +43,8 @@ object Anagrams {
       .toList.sorted
 
   /** Converts a sentence into its character occurrence list. */
-  def sentenceOccurrences(s: Sentence): Occurrences = 
-    ???
+  def sentenceOccurrences(s: Sentence): Occurrences =
+    wordOccurrences(s.foldLeft("")(_ concat _))
 
   /**
    * The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
