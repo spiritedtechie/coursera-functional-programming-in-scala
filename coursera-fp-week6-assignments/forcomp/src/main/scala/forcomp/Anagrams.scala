@@ -39,7 +39,7 @@ object Anagrams {
   def wordOccurrences(w: Word): Occurrences =
     w.toLowerCase()
       .groupBy((c: Char) => c)
-      .map((t: (Char, String)) => (t._1, t._2.length()))
+      .map(t => (t._1, t._2.length()))
       .toList.sorted
 
   /** Converts a sentence into its character occurrence list. */
@@ -120,7 +120,7 @@ object Anagrams {
     }
 
     x.toMap.foldLeft(Map[Char, Int]())((acc, t) => updateMap(acc, t))
-      .toList.filter(t => t._2 > 0)
+      .toList.filter(t => t._2 > 0).sorted
   }
 
   /**
@@ -164,6 +164,19 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
 
+    def iter(occurrences: Occurrences): List[Sentence] = {
+      if (occurrences.isEmpty) List(List())
+      else
+        for {
+          c <- combinations(occurrences)
+          word <- dictionaryByOccurrences.getOrElse(c, List())
+          rest <- iter(subtract(occurrences, wordOccurrences(word)))
+          if !c.isEmpty
+        } yield word :: rest
+    }
+
+    iter(sentenceOccurrences(sentence))
+  }
 }

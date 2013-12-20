@@ -7,6 +7,9 @@ object scratch {
       .toList.sorted
   }                                               //> occurences: (w: String)List[(Char, Int)]
 
+  def sentenceOccurrences(s: List[String]): List[(Char, Int)] =
+    occurences(s.foldLeft("")(_ concat _))        //> sentenceOccurrences: (s: List[String])List[(Char, Int)]
+
   occurences("Robert")                            //> res0: List[(Char, Int)] = List((b,1), (e,1), (o,1), (r,2), (t,1))
 
   List("Robert", "sat", "down").foldLeft("")((acc, w) => acc concat w)
@@ -32,14 +35,14 @@ object scratch {
       } yield ((char, n) :: rest).filter(x => x._2 > 0)
   }                                               //> combinations: (occurrences: List[(Char, Int)])List[List[(Char, Int)]]
 
-  combinations(List(('a', 2), ('b', 2), ('c', 2)))//> res3: List[List[(Char, Int)]] = List(List(), List((a,1)), List((a,2)), List(
-                                                  //| (b,1)), List((a,1), (b,1)), List((a,2), (b,1)), List((b,2)), List((a,1), (b,
-                                                  //| 2)), List((a,2), (b,2)), List((c,1)), List((a,1), (c,1)), List((a,2), (c,1))
-                                                  //| , List((b,1), (c,1)), List((a,1), (b,1), (c,1)), List((a,2), (b,1), (c,1)), 
-                                                  //| List((b,2), (c,1)), List((a,1), (b,2), (c,1)), List((a,2), (b,2), (c,1)), Li
-                                                  //| st((c,2)), List((a,1), (c,2)), List((a,2), (c,2)), List((b,1), (c,2)), List(
-                                                  //| (a,1), (b,1), (c,2)), List((a,2), (b,1), (c,2)), List((b,2), (c,2)), List((a
-                                                  //| ,1), (b,2), (c,2)), List((a,2), (b,2), (c,2)))
+  combinations(List(('a', 2), ('b', 2), ('c', 2)))//> res3: List[List[(Char, Int)]] = List(List(), List((a,1)), List((a,2)), List
+                                                  //| ((b,1)), List((a,1), (b,1)), List((a,2), (b,1)), List((b,2)), List((a,1), (
+                                                  //| b,2)), List((a,2), (b,2)), List((c,1)), List((a,1), (c,1)), List((a,2), (c,
+                                                  //| 1)), List((b,1), (c,1)), List((a,1), (b,1), (c,1)), List((a,2), (b,1), (c,1
+                                                  //| )), List((b,2), (c,1)), List((a,1), (b,2), (c,1)), List((a,2), (b,2), (c,1)
+                                                  //| ), List((c,2)), List((a,1), (c,2)), List((a,2), (c,2)), List((b,1), (c,2)),
+                                                  //|  List((a,1), (b,1), (c,2)), List((a,2), (b,1), (c,2)), List((b,2), (c,2)), 
+                                                  //| List((a,1), (b,2), (c,2)), List((a,2), (b,2), (c,2)))
 
   val x = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
                                                   //> x  : List[(Char, Int)] = List((a,1), (d,1), (l,1), (r,1))
@@ -54,9 +57,14 @@ object scratch {
     }
 
     x.toMap.foldLeft(Map[Char, Int]())((acc, t) => updateMap(acc, t))
-    	.toList.filter(t => t._2 > 0)
+      .toList.filter(t => t._2 > 0)
   }                                               //> subtract: (x: List[(Char, Int)], y: List[(Char, Int)])List[(Char, Int)]
 
   subtract(x, y)                                  //> res4: List[(Char, Int)] = List((a,1), (d,1), (l,1))
+
+  val sent = List("Yes", "man")                   //> sent  : List[String] = List(Yes, man)
+  val sentOcc = sentenceOccurrences(sent)         //> sentOcc  : List[(Char, Int)] = List((a,1), (e,1), (m,1), (n,1), (s,1), (y,1
+                                                  //| ))
+  
 
 }
