@@ -31,13 +31,13 @@ class Pouring(capacity: Vector[Int]) {
     (for (from <- glasses; to <- glasses if from != to) yield Pour(from, to))
 
   // Paths
-  class Path(history: List[Move]) {
-    def endState: State = (history foldRight initialState)(_ change _)
-    def extend(move: Move) = new Path(move :: history)
+  class Path(history: List[Move], val endState: State) {
+    //def endState: State = (history foldRight initialState)(_ change _)
+    def extend(move: Move) = new Path(move :: history, move change endState)
     override def toString = (history.reverse mkString " ") + " --> " + endState
   }
 
-  val initialPath = new Path(Nil)
+  val initialPath = new Path(Nil, initialState)
 
   def from(paths: Set[Path], explored: Set[State]): Stream[Set[Path]] =
     if (paths.isEmpty) Stream.Empty
