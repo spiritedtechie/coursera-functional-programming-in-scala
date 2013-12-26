@@ -1,7 +1,5 @@
 package streams
 
-import common._
-
 /**
  * This component implements the solver for the Bloxorz game
  */
@@ -67,19 +65,30 @@ trait Solver extends GameDef {
    * of different paths - the implementation should naturally
    * construct the correctly sorted stream.
    */
-  def from(initial: Stream[(Block, List[Move])],
-    explored: Set[Block]): Stream[(Block, List[Move])] = ???
+  def from(initial: Stream[(Block, List[Move])], explored: Set[Block]): Stream[(Block, List[Move])] = {
+    if (initial.isEmpty) Stream.Empty
+    else {
+      val nextMoves = for {
+        (block, movesHistory) <- initial
+        nextMove <- newNeighborsOnly(neighborsWithHistory(block, movesHistory), explored)
+      } yield nextMove
+
+      initial #::: from(nextMoves, explored ++ nextMoves.map { case (block, moves) => block })
+    }
+  }
 
   /**
    * The stream of all paths that begin at the starting block.
    */
-  lazy val pathsFromStart: Stream[(Block, List[Move])] = ???
+  lazy val pathsFromStart: Stream[(Block, List[Move])] =
+    from(List((startBlock, List())).toStream, Set(startBlock))
 
   /**
    * Returns a stream of all possible pairs of the goal block along
    * with the history how it was reached.
    */
-  lazy val pathsToGoal: Stream[(Block, List[Move])] = ???
+  lazy val pathsToGoal: Stream[(Block, List[Move])] =
+    pathsFromStart.filter { case (block, moves) => done(block) }
 
   /**
    * The (or one of the) shortest sequence(s) of moves to reach the
@@ -89,5 +98,12 @@ trait Solver extends GameDef {
    * the first move that the player should perform from the starting
    * position.
    */
-  lazy val solution: List[Move] = ???
+  lazy val solution: List[Move] = {
+    def iterate(paths: Stream[(Block, List[Move])], moves: List[Move]): List[Move] = paths match {
+      case (b, m) #:: t => if (m.length > moves.length) iterate(t, m) else iterate(t, moves)
+      case _ => moves
+    }
+
+    if (pathsToGoal.isEmpty) Nil else iterate(pathsToGoal, pathsToGoal.head._2)
+  }
 }
