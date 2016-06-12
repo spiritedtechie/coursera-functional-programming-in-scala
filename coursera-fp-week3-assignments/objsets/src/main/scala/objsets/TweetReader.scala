@@ -8,9 +8,6 @@ object TweetReader {
     def getList[T](s: String): List[T] =
       JSON.parseFull(s).get.asInstanceOf[List[T]]
 
-    def getMap(s: String): Map[String, Any] =
-      JSON.parseFull(s).get.asInstanceOf[Map[String, Any]]
-
     def getTweets(user: String, json: String): List[Tweet] =
       for (map <- getList[Map[String, Any]](json)) yield {
         val text = map("text")

@@ -1,3 +1,7 @@
 /.worksheet
 /bin
 /.scala_dependencies
+/project/target
+/target
+.idea
+*.iml
